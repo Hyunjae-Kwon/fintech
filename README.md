@@ -2,21 +2,15 @@
 
 ## 📝 프로젝트 주제
 
----
-
 스프링 부트를 활용한 서버 API 기반 커머스 프로젝트
 
 ## 🛢 프로젝트 구조
 
 ![DIAGRAM](doc/img/diagram.png)
 
----
-
 ### 🔗 ERD
 
 ![ERD](doc/img/erd.png)
-
----
 
 ### ⚙ Tech Stack
 
@@ -32,9 +26,9 @@
 - JDK : `JDK 11`
 - Library : `Lombok`, `Mariadb-Client`
 
-## 👦 회원가입과 로그인
-
 ---
+
+## 👦 회원가입과 로그인
 
 ### 회원가입
 
@@ -54,9 +48,9 @@
 - [ ] 상품 삭제
 - [ ] 회원 관리
 
-## 🔍 상품명 검색 기능
-
 ---
+
+## 🔍 상품명 검색 기능
 
 ### 상품 검색
 
@@ -68,15 +62,13 @@
 
 ## 🛒 상품 장바구니 기능
 
----
-
 - [ ] 상품 담기 (로그인 여부 확인)
 - [ ] 장바구니 목록 (본인 장바구니 조회)
 - [ ] 장바구니 삭제
 
-## 주차별 개발 계획
-
 ---
+
+## 📅 주차별 개발 계획
 
 - 1주차 - 프로젝트 주제 선정 및 기능 구성
 - 2주차 - 로그인, 회원가입 기능 구현
@@ -84,12 +76,10 @@
 - 4주차 - 장바구니 상품 담기, 장바구니 조회
 - 5주차 - 장바구니 상품 삭제, 관리자 로그인
 
-## Trouble Shooting
+## ⚠ Trouble Shooting
 
 [문제 해결 과정은 이 경로에서 확인할 수 있습니다.](doc/TROUBLE_SHOOTING.md)
 
 ---
-
-
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=150&section=footer" />
