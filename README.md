@@ -20,7 +20,7 @@
   - RDB : `Mysql`
 - Test : `Junit5`
 - Login Token : `JWT`
-- Test UI : `Swagger` `Postman`
+- Test UI : `Swagger`
 - Server : `Tomcat v8.5`
 - JDK : `JDK 17`
 - Library : `Lombok`, `MySQL-Connector`
