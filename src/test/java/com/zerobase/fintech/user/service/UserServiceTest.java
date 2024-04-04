@@ -61,7 +61,7 @@ class UserServiceTest {
   }
 
   @Test
-  @DisplayName("User_SignUp_Fail - Duplicated_UserId")
+  @DisplayName("User_SignUp_Fail : Duplicated_UserId")
   void signUpDuplicatedUserIdFail() {
     // given
     SignUpForm.Request request = SignUpForm.Request.builder()
@@ -84,7 +84,7 @@ class UserServiceTest {
   }
 
   @Test
-  @DisplayName("User_SignUp_Fail - Duplicated_UserInfo")
+  @DisplayName("User_SignUp_Fail : Duplicated_UserInfo")
   void signUpDuplicatedUserInfoFail() {
     // given
     SignUpForm.Request request = SignUpForm.Request.builder()

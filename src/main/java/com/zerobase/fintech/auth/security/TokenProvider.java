@@ -84,7 +84,11 @@ public class TokenProvider {
 
   private Claims parseClaims(String token){
     try{
-      return Jwts.parser().setSigningKey(this.secretKey).parseClaimsJws(token).getBody();
+      return Jwts.parserBuilder()
+          .setSigningKey(TransferSecretKey())
+          .build()
+          .parseClaimsJws(token)
+          .getBody();
     }catch (ExpiredJwtException e) {
       throw new JwtException(ErrorCode.TOKEN_TIME_OUT.getDescription());
     }catch (SignatureException e){
@@ -95,7 +99,8 @@ public class TokenProvider {
   public Authentication getAuthentication(String token) {
     String userId = this.getUserId(token);
     UserDetails userDetails = userService.loadUserByUsername(userId);
-    return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
+    return new UsernamePasswordAuthenticationToken(
+        userDetails, "", userDetails.getAuthorities());
   }
 
 }
