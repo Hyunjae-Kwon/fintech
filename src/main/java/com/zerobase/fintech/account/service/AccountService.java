@@ -44,10 +44,6 @@ public class AccountService {
     UserEntity user = userRepository.findByUserId(request.getUserId())
         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-    log.info("request password -> {}, user password -> {}",
-        request.getPassword(),
-        user.getPassword());
-
     if(!PasswordUtils.equals(request.getPassword(), user.getPassword())) {
       throw new CustomException(ErrorCode.PASSWORD_INCORRECT);
     }
