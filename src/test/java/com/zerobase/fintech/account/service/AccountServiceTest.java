@@ -118,7 +118,26 @@ class AccountServiceTest {
       assertEquals(e.getErrorCode(), ErrorCode.USER_NOT_FOUND);
       assertEquals(e.getErrorMessage(), ErrorCode.USER_NOT_FOUND.getDescription());
     }
+  }
 
+  @Test
+  @DisplayName("Delete_Account_Fail : Password_Incorrect")
+  void deleteAccountFail_Password_Incorrect() {
+    // given
+    DeleteForm.Request request = DeleteForm.Request.builder()
+        .userId("test2")
+        .password("pw")
+        .accountNumber("2361337411490")
+        .build();
+
+    // when
+    try {
+      accountService.deleteAccount(request);
+      // then
+    } catch(CustomException e) {
+      assertEquals(e.getErrorCode(), ErrorCode.PASSWORD_INCORRECT);
+      assertEquals(e.getErrorMessage(), ErrorCode.PASSWORD_INCORRECT.getDescription());
+    }
   }
 
   @Test
@@ -130,7 +149,6 @@ class AccountServiceTest {
         .password("pw2")
         .accountNumber("9583268840115")
         .build();
-
     // when
     try {
       accountService.deleteAccount(request);

@@ -9,6 +9,7 @@ import com.zerobase.fintech.exception.CustomException;
 import com.zerobase.fintech.exception.ErrorCode;
 import com.zerobase.fintech.user.dao.UserRepository;
 import com.zerobase.fintech.user.entity.UserEntity;
+import com.zerobase.fintech.util.PasswordUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,6 +43,14 @@ public class AccountService {
 
     UserEntity user = userRepository.findByUserId(request.getUserId())
         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+    log.info("request password -> {}, user password -> {}",
+        request.getPassword(),
+        user.getPassword());
+
+    if(!PasswordUtils.equals(request.getPassword(), user.getPassword())) {
+      throw new CustomException(ErrorCode.PASSWORD_INCORRECT);
+    }
 
     AccountDto account = this.findAccountInfo(request.getAccountNumber());
 
