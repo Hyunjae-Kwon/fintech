@@ -58,7 +58,7 @@ public class UserService implements UserDetailsService {
   public UserDetails loadUserByUsername(String userId) {
     log.info("Load User => USERID : {}", userId);
     if(userRepository.existsByUserId(userId)) {
-      return (UserDetails) userRepository.findByUserId(userId)
+      return userRepository.findByUserId(userId)
           .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }
     log.error("UserService -> loadUserByUsername FAILED");
