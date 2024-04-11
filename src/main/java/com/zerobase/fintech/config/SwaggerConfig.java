@@ -24,7 +24,8 @@ import org.springframework.context.annotation.Configuration;
     ),
     tags = {
         @Tag(name = "1. USER", description = "회원 기능"),
-        @Tag(name = "2. ACCOUNT", description = "계좌 기능")
+        @Tag(name = "2. ACCOUNT", description = "계좌 기능"),
+        @Tag(name = "3. TRANSACTION", description = "입출금 기능")
     }
 )
 @Configuration

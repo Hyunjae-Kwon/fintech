@@ -20,7 +20,8 @@ public enum ErrorCode {
   ACCOUNT_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "해당 계좌가 존재하지 않습니다."),
   DUPLICATED_ACCOUNTNUMBER(HttpStatus.CONTINUE.value(), "계좌번호 생성 오류 : 중복"),
   NOT_YOUR_ACCOUNT(HttpStatus.BAD_REQUEST.value(), "본인 소유의 계좌가 아닙니다."),
-  ACCOUNT_NOT_EMPTY(HttpStatus.BAD_REQUEST.value(), "계좌 잔액이 0이 아닙니다.");
+  ACCOUNT_NOT_EMPTY(HttpStatus.BAD_REQUEST.value(), "계좌 잔액이 0이 아닙니다."),
+  LEAST_AMOUNT(HttpStatus.BAD_REQUEST.value(), "0원 이하의 금액은 입금 및 출금을 할 수 없습니다.");
 
 
   private final int statusCode;

@@ -30,4 +30,12 @@ public class AccountEntity {
   private int amount;
   private LocalDateTime createAt;
   private LocalDateTime latestAt;
+
+  public void edit(int amount){
+    if(amount != 0) {
+      this.amount = amount;
+    }
+
+    this.latestAt = LocalDateTime.now();
+  }
 }
