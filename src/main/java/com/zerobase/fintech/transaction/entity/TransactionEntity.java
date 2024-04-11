@@ -1,7 +1,6 @@
 package com.zerobase.fintech.transaction.entity;
 
 import com.zerobase.fintech.account.entity.AccountEntity;
-import com.zerobase.fintech.user.entity.UserEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,6 +33,6 @@ public class TransactionEntity {
   private int deposit;
   private int withdraw;
   private String transactionName;
-  private boolean verify = true;
+  private boolean verify;
   private LocalDateTime createAt;
 }

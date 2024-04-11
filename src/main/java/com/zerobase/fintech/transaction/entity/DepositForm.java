@@ -18,6 +18,7 @@ public class DepositForm {
     private AccountEntity accountNumber;
     private int deposit;
     private String transactionName;
+    private boolean verify;
     private LocalDateTime createAt;
 
     public static TransactionEntity toEntity(Request request) {
@@ -25,6 +26,7 @@ public class DepositForm {
           .accountNumber(request.getAccountNumber())
           .deposit(request.getDeposit())
           .transactionName(request.getTransactionName())
+          .verify(true)
           .createAt(LocalDateTime.now())
           .build();
     }
