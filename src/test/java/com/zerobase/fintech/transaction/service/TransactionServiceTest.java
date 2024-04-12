@@ -35,6 +35,7 @@ class TransactionServiceTest {
     DepositForm.Request request = DepositForm.Request.builder()
         .deposit(10000)
         .transactionName("ATM")
+        .verify(true)
         .build();
 
     // when
@@ -47,6 +48,7 @@ class TransactionServiceTest {
     log.info("Create At : {}", transactionDto.getCreateAt());
     assertEquals(transactionDto.getDeposit(), 10000);
     assertEquals(transactionDto.getTransactionName(), "ATM");
+    assertTrue(transactionDto.isVerify());
     assertNotNull(transactionDto.getAccountNumber());
   }
 
