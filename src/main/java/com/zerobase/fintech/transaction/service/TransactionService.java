@@ -70,6 +70,10 @@ public class TransactionService {
       throw new CustomException(ErrorCode.LEAST_AMOUNT);
     }
 
+    if(request.getWithdraw() > account.getAmount()) {
+      throw new CustomException(ErrorCode.LOW_AMOUNT);
+    }
+
     request.setAccountNumber(account);
 
     account.edit(account.getAmount() - request.getWithdraw());

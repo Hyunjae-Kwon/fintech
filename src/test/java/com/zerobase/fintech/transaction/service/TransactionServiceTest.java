@@ -276,4 +276,33 @@ class TransactionServiceTest {
       assertEquals(e.getErrorMessage(), ErrorCode.LEAST_AMOUNT.getDescription());
     }
   }
+
+  @Test
+  @DisplayName("Withdraw_Transaction_Fail : Low_Amount")
+  void withdrawTransactionFail_LowAmount() {
+    // given
+    String accountNumber = "9583268840115";
+    WithdrawForm.Request request = WithdrawForm.Request.builder()
+        .withdraw(100000)
+        .userId("test")
+        .password("pw")
+        .transactionName("ATM")
+        .verify(true)
+        .build();
+
+    UserEntity userEntity = UserEntity.builder()
+        .userId("test")
+        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .build();
+
+    // when
+    try {
+      transactionService.withdrawTransaction(accountNumber, request, userEntity);
+
+      // then
+    } catch (CustomException e) {
+      assertEquals(e.getErrorCode(), ErrorCode.LOW_AMOUNT);
+      assertEquals(e.getErrorMessage(), ErrorCode.LOW_AMOUNT.getDescription());
+    }
+  }
 }
