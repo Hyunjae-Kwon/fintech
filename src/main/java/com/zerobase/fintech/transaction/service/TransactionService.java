@@ -5,10 +5,9 @@ import com.zerobase.fintech.account.entity.AccountEntity;
 import com.zerobase.fintech.exception.CustomException;
 import com.zerobase.fintech.exception.ErrorCode;
 import com.zerobase.fintech.transaction.dao.TransactionRepository;
-import com.zerobase.fintech.transaction.entity.DepositForm;
 import com.zerobase.fintech.transaction.entity.TransactionDto;
 import com.zerobase.fintech.transaction.entity.TransactionEntity;
-import com.zerobase.fintech.transaction.entity.WithdrawForm;
+import com.zerobase.fintech.transaction.entity.TransactionForm;
 import com.zerobase.fintech.user.entity.UserEntity;
 import com.zerobase.fintech.util.PasswordUtils;
 import jakarta.transaction.Transactional;
@@ -26,30 +25,30 @@ public class TransactionService {
   private final AccountRepository accountRepository;
 
   public TransactionDto depositTransaction(String accountNumber,
-      DepositForm.Request request) {
+      TransactionForm.Request request) {
 
     AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
         .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
 
-    if(request.getDeposit() <= 0) {
+    if(request.getAmount() <= 0) {
       throw new CustomException(ErrorCode.LEAST_AMOUNT);
     }
 
-    request.setAccountNumber(account);
+    request.setToAccountNumber(account);
 
-    account.edit(account.getAmount() + request.getDeposit());
+    account.edit(account.getAmount() + request.getAmount());
 
     accountRepository.save(account);
 
     TransactionEntity deposit = transactionRepository.save(
-        DepositForm.Request.toEntity(request)
+        TransactionForm.Request.toDepositEntity(request)
     );
 
     return TransactionDto.from(deposit);
   }
 
   public TransactionDto withdrawTransaction(String accountNumber,
-      WithdrawForm.Request request, UserEntity userEntity) {
+      TransactionForm.Request request, UserEntity userEntity) {
 
     if(!request.getUserId().equals(userEntity.getUserId())) {
       throw new CustomException(ErrorCode.USER_NOT_MATCH);
@@ -66,22 +65,22 @@ public class TransactionService {
       throw new CustomException(ErrorCode.NOT_YOUR_ACCOUNT);
     }
 
-    if(request.getWithdraw() <= 0) {
+    if(request.getAmount() <= 0) {
       throw new CustomException(ErrorCode.LEAST_AMOUNT);
     }
 
-    if(request.getWithdraw() > account.getAmount()) {
+    if(request.getAmount() > account.getAmount()) {
       throw new CustomException(ErrorCode.LOW_AMOUNT);
     }
 
     request.setAccountNumber(account);
 
-    account.edit(account.getAmount() - request.getWithdraw());
+    account.edit(account.getAmount() - request.getAmount());
 
     accountRepository.save(account);
 
     TransactionEntity withdraw = transactionRepository.save(
-        WithdrawForm.Request.toEntity(request)
+        TransactionForm.Request.toWithdrawEntity(request)
     );
 
     return TransactionDto.from(withdraw);

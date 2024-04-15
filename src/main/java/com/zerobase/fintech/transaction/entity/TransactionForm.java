@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-public class DepositForm {
+public class TransactionForm {
 
   @Data
   @AllArgsConstructor
@@ -16,15 +16,28 @@ public class DepositForm {
   public static class Request {
 
     private AccountEntity accountNumber;
-    private int deposit;
+    private int amount;
+    private String userId;
+    private String password;
+    private AccountEntity toAccountNumber;
     private String transactionName;
     private boolean verify;
     private LocalDateTime createAt;
 
-    public static TransactionEntity toEntity(Request request) {
+    public static TransactionEntity toDepositEntity(Request request) {
+      return TransactionEntity.builder()
+          .accountNumber(request.getToAccountNumber())
+          .deposit(request.getAmount())
+          .transactionName(request.getTransactionName())
+          .verify(true)
+          .createAt(LocalDateTime.now())
+          .build();
+    }
+
+    public static TransactionEntity toWithdrawEntity(Request request) {
       return TransactionEntity.builder()
           .accountNumber(request.getAccountNumber())
-          .deposit(request.getDeposit())
+          .withdraw(request.getAmount())
           .transactionName(request.getTransactionName())
           .verify(true)
           .createAt(LocalDateTime.now())
@@ -39,14 +52,23 @@ public class DepositForm {
   public static class Response {
 
     private AccountEntity accountNumber;
-    private int deposit;
+    private int amount;
     private String transactionName;
     private LocalDateTime createAt;
 
-    public static Response fromDto(TransactionDto transactionDto) {
+    public static Response fromDepositDto(TransactionDto transactionDto) {
       return Response.builder()
           .accountNumber(transactionDto.getAccountNumber())
-          .deposit(transactionDto.getDeposit())
+          .amount(transactionDto.getDeposit())
+          .transactionName(transactionDto.getTransactionName())
+          .createAt(transactionDto.getCreateAt())
+          .build();
+    }
+
+    public static Response fromWithdrawDto(TransactionDto transactionDto) {
+      return Response.builder()
+          .accountNumber(transactionDto.getAccountNumber())
+          .amount(transactionDto.getDeposit())
           .transactionName(transactionDto.getTransactionName())
           .createAt(transactionDto.getCreateAt())
           .build();

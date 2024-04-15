@@ -1,13 +1,13 @@
 package com.zerobase.fintech.transaction.service;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import com.zerobase.fintech.account.service.AccountService;
 import com.zerobase.fintech.exception.CustomException;
 import com.zerobase.fintech.exception.ErrorCode;
-import com.zerobase.fintech.transaction.entity.DepositForm;
 import com.zerobase.fintech.transaction.entity.TransactionDto;
-import com.zerobase.fintech.transaction.entity.WithdrawForm;
+import com.zerobase.fintech.transaction.entity.TransactionForm;
 import com.zerobase.fintech.user.entity.UserEntity;
 import com.zerobase.fintech.user.service.UserService;
 import jakarta.transaction.Transactional;
@@ -36,16 +36,15 @@ class TransactionServiceTest {
   void depositTransaction() {
     // given
     String accountNumber = "9583268840115";
-    DepositForm.Request request = DepositForm.Request.builder()
-        .deposit(10000)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(10000)
         .transactionName("ATM")
         .verify(true)
         .build();
 
     // when
     TransactionDto transactionDto =
-        transactionService.depositTransaction(accountNumber,
-        request);
+        transactionService.depositTransaction(accountNumber, request);
 
     // then
     log.info("Transaction ID : {}", transactionDto.getTransactionId());
@@ -61,8 +60,8 @@ class TransactionServiceTest {
   void depositTransactionFail_AccountNotFound() {
     // given
     String accountNumber = "1234567890123";
-    DepositForm.Request request = DepositForm.Request.builder()
-        .deposit(10000)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(10000)
         .transactionName("ATM")
         .verify(true)
         .build();
@@ -83,8 +82,8 @@ class TransactionServiceTest {
   void depositTransactionFail_LeastAmount() {
     // given
     String accountNumber = "9583268840115";
-    DepositForm.Request request = DepositForm.Request.builder()
-        .deposit(0)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(0)
         .transactionName("ATM")
         .verify(true)
         .build();
@@ -105,8 +104,8 @@ class TransactionServiceTest {
   void withdrawTransaction() {
     // given
     String accountNumber = "9583268840115";
-    WithdrawForm.Request request = WithdrawForm.Request.builder()
-        .withdraw(1000)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(1000)
         .userId("test")
         .password("pw")
         .transactionName("ATM")
@@ -137,8 +136,8 @@ class TransactionServiceTest {
   void withdrawTransactionFail_UserNotMatch() {
     // given
     String accountNumber = "9583268840115";
-    WithdrawForm.Request request = WithdrawForm.Request.builder()
-        .withdraw(1000)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(1000)
         .userId("test1")
         .password("pw")
         .transactionName("ATM")
@@ -166,8 +165,8 @@ class TransactionServiceTest {
   void withdrawTransactionFail_PasswordIncorrect() {
     // given
     String accountNumber = "9583268840115";
-    WithdrawForm.Request request = WithdrawForm.Request.builder()
-        .withdraw(1000)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(1000)
         .userId("test")
         .password("pw1")
         .transactionName("ATM")
@@ -195,8 +194,8 @@ class TransactionServiceTest {
   void withdrawTransactionFail_AccountNotFound() {
     // given
     String accountNumber = "0123456789012";
-    WithdrawForm.Request request = WithdrawForm.Request.builder()
-        .withdraw(1000)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(1000)
         .userId("test")
         .password("pw")
         .transactionName("ATM")
@@ -224,8 +223,8 @@ class TransactionServiceTest {
   void withdrawTransactionFail_NotYourAccount() {
     // given
     String accountNumber = "2361337411490";
-    WithdrawForm.Request request = WithdrawForm.Request.builder()
-        .withdraw(1000)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(1000)
         .userId("test")
         .password("pw")
         .transactionName("ATM")
@@ -253,8 +252,8 @@ class TransactionServiceTest {
   void withdrawTransactionFail_LeastAmount() {
     // given
     String accountNumber = "9583268840115";
-    WithdrawForm.Request request = WithdrawForm.Request.builder()
-        .withdraw(0)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(0)
         .userId("test")
         .password("pw")
         .transactionName("ATM")
@@ -282,8 +281,8 @@ class TransactionServiceTest {
   void withdrawTransactionFail_LowAmount() {
     // given
     String accountNumber = "9583268840115";
-    WithdrawForm.Request request = WithdrawForm.Request.builder()
-        .withdraw(100000)
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(100000)
         .userId("test")
         .password("pw")
         .transactionName("ATM")
@@ -304,5 +303,39 @@ class TransactionServiceTest {
       assertEquals(e.getErrorCode(), ErrorCode.LOW_AMOUNT);
       assertEquals(e.getErrorMessage(), ErrorCode.LOW_AMOUNT.getDescription());
     }
+  }
+
+  @Test
+  @DisplayName("Transfer_Transaction_Success")
+  void transferTransaction() {
+    // given
+    String accountNumber = "9583268840115";
+    String toAccountNumber = "2361337411490";
+    TransactionForm.Request request = TransactionForm.Request.builder()
+        .amount(1000)
+        .userId("test")
+        .password("pw")
+        .transactionName("ATM")
+        .verify(true)
+        .build();
+
+    UserEntity userEntity = UserEntity.builder()
+        .userId("test")
+        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .build();
+
+    // when
+    TransactionDto withdrawDto =
+        transactionService.withdrawTransaction(accountNumber, request, userEntity);
+
+    transactionService.depositTransaction(toAccountNumber, request);
+
+    // then
+    log.info("Transaction ID : {}", withdrawDto.getTransactionId());
+    log.info("Create At : {}", withdrawDto.getCreateAt());
+    assertEquals(withdrawDto.getWithdraw(), 1000);
+    assertEquals(withdrawDto.getTransactionName(), "ATM");
+    assertTrue(withdrawDto.isVerify());
+    assertNotNull(withdrawDto.getAccountNumber());
   }
 }
