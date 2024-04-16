@@ -13,6 +13,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 @Slf4j
 @SpringBootTest
@@ -197,5 +198,22 @@ class AccountServiceTest {
       assertEquals(e.getErrorCode(), ErrorCode.ACCOUNT_NOT_FOUND);
       assertEquals(e.getErrorMessage(), ErrorCode.ACCOUNT_NOT_FOUND.getDescription());
     }
+  }
+
+  @Test
+  @DisplayName("Get_All_Account_Success")
+  void getAllAccount() {
+    // given
+    String userId = "test";
+    Integer page = 0;
+
+    // when
+    Page<AccountDto> accounts = accountService.getAllAccount(userId, page);
+
+    // then
+    assertNotNull(accounts.getContent());
+    assertEquals(accounts.getTotalElements(), 2);
+    assertEquals(accounts.getTotalPages(), 1);
+    assertEquals(accounts.getSize(), 5);
   }
 }

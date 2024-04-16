@@ -13,6 +13,8 @@ import com.zerobase.fintech.util.PasswordUtils;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -70,5 +72,19 @@ public class AccountService {
         .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
 
     return AccountDto.from(account);
+  }
+
+  public Page<AccountDto> getAllAccount(String userId, Integer page) {
+    UserEntity user = userRepository.findByUserId(userId)
+        .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
+
+    Page<AccountEntity> accounts = accountRepository.findByUserId(user,
+        PageRequest.of(page, 5));
+
+    if(accounts.getSize() == 0) {
+      throw new CustomException(ErrorCode.NOT_HAVE_ACCOUNT);
+    }
+
+    return accounts.map(AccountDto::from);
   }
 }
