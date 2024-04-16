@@ -30,8 +30,10 @@ public class TransactionController {
       @PathVariable(name = "accountNumber") String accountNumber,
       @RequestBody TransactionForm.Request request
   ){
+    String fromAccountNumber = null;
     TransactionDto depositTransaction =
-        transactionService.depositTransaction(accountNumber, request);
+        transactionService.depositTransaction(accountNumber, fromAccountNumber,
+            request);
 
     return ResponseEntity.ok(TransactionForm.Response.fromDepositDto(depositTransaction));
   }
@@ -43,8 +45,10 @@ public class TransactionController {
       @RequestBody TransactionForm.Request request,
       @AuthenticationPrincipal UserEntity userEntity
   ){
+    String toAccountNumber = null;
     TransactionDto withdrawTransaction =
-        transactionService.withdrawTransaction(accountNumber, request, userEntity);
+        transactionService.withdrawTransaction(accountNumber, toAccountNumber
+            , request, userEntity);
 
     return ResponseEntity.ok(TransactionForm.Response.fromWithdrawDto(withdrawTransaction));
   }
@@ -58,13 +62,17 @@ public class TransactionController {
       @AuthenticationPrincipal UserEntity userEntity
   ){
     TransactionDto withdrawTransaction =
-        transactionService.withdrawTransaction(accountNumber, request,
+        transactionService.withdrawTransaction(accountNumber, toAccountNumber
+            , request,
             userEntity);
 
+    String emptyAccountNumber = null;
     try {
-      transactionService.depositTransaction(toAccountNumber, request);
+      transactionService.depositTransaction(toAccountNumber,
+          accountNumber, request);
     } catch (CustomException e) {
-      transactionService.depositTransaction(accountNumber, request);
+      transactionService.depositTransaction(accountNumber, emptyAccountNumber
+          , request);
     }
 
     return ResponseEntity.ok(TransactionForm.Response.fromWithdrawDto(withdrawTransaction));

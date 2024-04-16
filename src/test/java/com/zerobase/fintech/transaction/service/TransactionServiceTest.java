@@ -36,15 +36,16 @@ class TransactionServiceTest {
   void depositTransaction() {
     // given
     String accountNumber = "9583268840115";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(10000)
-        .transactionName("ATM")
         .verify(true)
         .build();
 
     // when
     TransactionDto transactionDto =
-        transactionService.depositTransaction(accountNumber, request);
+        transactionService.depositTransaction(accountNumber,
+            emptyAccountNumber, request);
 
     // then
     log.info("Transaction ID : {}", transactionDto.getTransactionId());
@@ -60,6 +61,7 @@ class TransactionServiceTest {
   void depositTransactionFail_AccountNotFound() {
     // given
     String accountNumber = "1234567890123";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(10000)
         .transactionName("ATM")
@@ -68,7 +70,8 @@ class TransactionServiceTest {
 
     // when
     try {
-      transactionService.depositTransaction(accountNumber, request);
+      transactionService.depositTransaction(accountNumber, emptyAccountNumber
+          , request);
 
       // then
     } catch (CustomException e) {
@@ -82,6 +85,7 @@ class TransactionServiceTest {
   void depositTransactionFail_LeastAmount() {
     // given
     String accountNumber = "9583268840115";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(0)
         .transactionName("ATM")
@@ -90,7 +94,8 @@ class TransactionServiceTest {
 
     // when
     try {
-      transactionService.depositTransaction(accountNumber, request);
+      transactionService.depositTransaction(accountNumber, emptyAccountNumber
+          , request);
 
       // then
     } catch (CustomException e) {
@@ -104,6 +109,7 @@ class TransactionServiceTest {
   void withdrawTransaction() {
     // given
     String accountNumber = "9583268840115";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(1000)
         .userId("test")
@@ -120,7 +126,7 @@ class TransactionServiceTest {
     // when
     TransactionDto transactionDto =
         transactionService.withdrawTransaction(accountNumber,
-            request, userEntity);
+            emptyAccountNumber, request, userEntity);
 
     // then
     log.info("Transaction ID : {}", transactionDto.getTransactionId());
@@ -136,6 +142,7 @@ class TransactionServiceTest {
   void withdrawTransactionFail_UserNotMatch() {
     // given
     String accountNumber = "9583268840115";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(1000)
         .userId("test1")
@@ -151,7 +158,8 @@ class TransactionServiceTest {
 
     // when
     try {
-      transactionService.withdrawTransaction(accountNumber, request, userEntity);
+      transactionService.withdrawTransaction(accountNumber,
+          emptyAccountNumber, request, userEntity);
 
       // then
     } catch (CustomException e) {
@@ -165,6 +173,7 @@ class TransactionServiceTest {
   void withdrawTransactionFail_PasswordIncorrect() {
     // given
     String accountNumber = "9583268840115";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(1000)
         .userId("test")
@@ -180,7 +189,8 @@ class TransactionServiceTest {
 
     // when
     try {
-      transactionService.withdrawTransaction(accountNumber, request, userEntity);
+      transactionService.withdrawTransaction(accountNumber,
+          emptyAccountNumber, request, userEntity);
 
       // then
     } catch (CustomException e) {
@@ -194,6 +204,7 @@ class TransactionServiceTest {
   void withdrawTransactionFail_AccountNotFound() {
     // given
     String accountNumber = "0123456789012";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(1000)
         .userId("test")
@@ -209,7 +220,9 @@ class TransactionServiceTest {
 
     // when
     try {
-      transactionService.withdrawTransaction(accountNumber, request, userEntity);
+      transactionService.withdrawTransaction(accountNumber,
+          emptyAccountNumber, request,
+          userEntity);
 
       // then
     } catch (CustomException e) {
@@ -223,6 +236,7 @@ class TransactionServiceTest {
   void withdrawTransactionFail_NotYourAccount() {
     // given
     String accountNumber = "2361337411490";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(1000)
         .userId("test")
@@ -238,7 +252,9 @@ class TransactionServiceTest {
 
     // when
     try {
-      transactionService.withdrawTransaction(accountNumber, request, userEntity);
+      transactionService.withdrawTransaction(accountNumber,
+          emptyAccountNumber, request,
+          userEntity);
 
       // then
     } catch (CustomException e) {
@@ -252,6 +268,7 @@ class TransactionServiceTest {
   void withdrawTransactionFail_LeastAmount() {
     // given
     String accountNumber = "9583268840115";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(0)
         .userId("test")
@@ -267,7 +284,8 @@ class TransactionServiceTest {
 
     // when
     try {
-      transactionService.withdrawTransaction(accountNumber, request, userEntity);
+      transactionService.withdrawTransaction(accountNumber,
+          emptyAccountNumber, request, userEntity);
 
       // then
     } catch (CustomException e) {
@@ -281,6 +299,7 @@ class TransactionServiceTest {
   void withdrawTransactionFail_LowAmount() {
     // given
     String accountNumber = "9583268840115";
+    String emptyAccountNumber = null;
     TransactionForm.Request request = TransactionForm.Request.builder()
         .amount(100000)
         .userId("test")
@@ -296,7 +315,9 @@ class TransactionServiceTest {
 
     // when
     try {
-      transactionService.withdrawTransaction(accountNumber, request, userEntity);
+      transactionService.withdrawTransaction(accountNumber,
+          emptyAccountNumber, request,
+          userEntity);
 
       // then
     } catch (CustomException e) {
@@ -326,15 +347,17 @@ class TransactionServiceTest {
 
     // when
     TransactionDto withdrawDto =
-        transactionService.withdrawTransaction(accountNumber, request, userEntity);
+        transactionService.withdrawTransaction(accountNumber, toAccountNumber
+            , request, userEntity);
 
-    transactionService.depositTransaction(toAccountNumber, request);
+    transactionService.depositTransaction(toAccountNumber, accountNumber,
+        request);
 
     // then
     log.info("Transaction ID : {}", withdrawDto.getTransactionId());
     log.info("Create At : {}", withdrawDto.getCreateAt());
     assertEquals(withdrawDto.getWithdraw(), 1000);
-    assertEquals(withdrawDto.getTransactionName(), "ATM");
+    assertEquals(withdrawDto.getTransactionName(), "test2");
     assertTrue(withdrawDto.isVerify());
     assertNotNull(withdrawDto.getAccountNumber());
   }
