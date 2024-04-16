@@ -26,7 +26,7 @@ class UserServiceTest {
   UserService userService;
 
   @BeforeEach
-  void insertUser(){
+  void insertUser() {
     userService.signUp(SignUpForm.Request.builder()
         .userId("user1")
         .password("userpw")
@@ -76,10 +76,11 @@ class UserServiceTest {
     try {
       userService.signUp(request);
 
-    // then
+      // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.DUPLICATED_USERID);
-      assertEquals(e.getErrorMessage(), ErrorCode.DUPLICATED_USERID.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.DUPLICATED_USERID.getDescription());
     }
   }
 
@@ -102,7 +103,8 @@ class UserServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.ALREADY_SIGNUP_USER);
-      assertEquals(e.getErrorMessage(), ErrorCode.ALREADY_SIGNUP_USER.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.ALREADY_SIGNUP_USER.getDescription());
     }
   }
 

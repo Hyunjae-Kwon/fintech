@@ -27,7 +27,7 @@ public class UserController {
 
   @Operation(summary = "회원가입")
   @PostMapping("/user/signUp")
-  public ResponseEntity<?> signUpUser(@RequestBody SignUpForm.Request request){
+  public ResponseEntity<?> signUpUser(@RequestBody SignUpForm.Request request) {
     UserDto signedUpUser = userService.signUp(request);
 
     return ResponseEntity.ok(SignUpForm.Response.fromDto(signedUpUser));

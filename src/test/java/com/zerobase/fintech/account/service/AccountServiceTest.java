@@ -34,7 +34,8 @@ class AccountServiceTest {
     String accountNumber = "0123456789123";
 
     // when
-    AccountDto createAccount = accountService.createAccount(userId, accountNumber);
+    AccountDto createAccount = accountService.createAccount(userId,
+        accountNumber);
 
     // then
     log.info("Create At : {}", createAccount.getCreateAt());
@@ -57,7 +58,8 @@ class AccountServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.USER_NOT_FOUND);
-      assertEquals(e.getErrorMessage(), ErrorCode.USER_NOT_FOUND.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.USER_NOT_FOUND.getDescription());
     }
   }
 
@@ -75,7 +77,8 @@ class AccountServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.DUPLICATED_ACCOUNTNUMBER);
-      assertEquals(e.getErrorMessage(), ErrorCode.DUPLICATED_ACCOUNTNUMBER.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.DUPLICATED_ACCOUNTNUMBER.getDescription());
     }
   }
 
@@ -115,9 +118,10 @@ class AccountServiceTest {
     try {
       accountService.deleteAccount(request);
       // then
-    } catch(CustomException e) {
+    } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.USER_NOT_FOUND);
-      assertEquals(e.getErrorMessage(), ErrorCode.USER_NOT_FOUND.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.USER_NOT_FOUND.getDescription());
     }
   }
 
@@ -135,9 +139,10 @@ class AccountServiceTest {
     try {
       accountService.deleteAccount(request);
       // then
-    } catch(CustomException e) {
+    } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.PASSWORD_INCORRECT);
-      assertEquals(e.getErrorMessage(), ErrorCode.PASSWORD_INCORRECT.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.PASSWORD_INCORRECT.getDescription());
     }
   }
 
@@ -154,9 +159,10 @@ class AccountServiceTest {
     try {
       accountService.deleteAccount(request);
       // then
-    } catch(CustomException e) {
+    } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.NOT_YOUR_ACCOUNT);
-      assertEquals(e.getErrorMessage(), ErrorCode.NOT_YOUR_ACCOUNT.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.NOT_YOUR_ACCOUNT.getDescription());
     }
   }
 
@@ -174,9 +180,10 @@ class AccountServiceTest {
     try {
       accountService.deleteAccount(request);
       // then
-    } catch(CustomException e) {
+    } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.ACCOUNT_NOT_EMPTY);
-      assertEquals(e.getErrorMessage(), ErrorCode.ACCOUNT_NOT_EMPTY.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.ACCOUNT_NOT_EMPTY.getDescription());
     }
   }
 
@@ -194,9 +201,10 @@ class AccountServiceTest {
     try {
       accountService.deleteAccount(request);
       // then
-    } catch(CustomException e) {
+    } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.ACCOUNT_NOT_FOUND);
-      assertEquals(e.getErrorMessage(), ErrorCode.ACCOUNT_NOT_FOUND.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.ACCOUNT_NOT_FOUND.getDescription());
     }
   }
 

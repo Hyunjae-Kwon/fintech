@@ -76,7 +76,8 @@ class TransactionServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.ACCOUNT_NOT_FOUND);
-      assertEquals(e.getErrorMessage(), ErrorCode.ACCOUNT_NOT_FOUND.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.ACCOUNT_NOT_FOUND.getDescription());
     }
   }
 
@@ -100,7 +101,8 @@ class TransactionServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.LEAST_AMOUNT);
-      assertEquals(e.getErrorMessage(), ErrorCode.LEAST_AMOUNT.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.LEAST_AMOUNT.getDescription());
     }
   }
 
@@ -120,7 +122,8 @@ class TransactionServiceTest {
 
     UserEntity userEntity = UserEntity.builder()
         .userId("test")
-        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .password(
+            "$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
         .build();
 
     // when
@@ -153,7 +156,8 @@ class TransactionServiceTest {
 
     UserEntity userEntity = UserEntity.builder()
         .userId("test")
-        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .password(
+            "$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
         .build();
 
     // when
@@ -164,7 +168,8 @@ class TransactionServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.USER_NOT_MATCH);
-      assertEquals(e.getErrorMessage(), ErrorCode.USER_NOT_MATCH.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.USER_NOT_MATCH.getDescription());
     }
   }
 
@@ -184,7 +189,8 @@ class TransactionServiceTest {
 
     UserEntity userEntity = UserEntity.builder()
         .userId("test")
-        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .password(
+            "$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
         .build();
 
     // when
@@ -195,7 +201,8 @@ class TransactionServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.PASSWORD_INCORRECT);
-      assertEquals(e.getErrorMessage(), ErrorCode.PASSWORD_INCORRECT.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.PASSWORD_INCORRECT.getDescription());
     }
   }
 
@@ -215,7 +222,8 @@ class TransactionServiceTest {
 
     UserEntity userEntity = UserEntity.builder()
         .userId("test")
-        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .password(
+            "$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
         .build();
 
     // when
@@ -227,7 +235,8 @@ class TransactionServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.ACCOUNT_NOT_FOUND);
-      assertEquals(e.getErrorMessage(), ErrorCode.ACCOUNT_NOT_FOUND.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.ACCOUNT_NOT_FOUND.getDescription());
     }
   }
 
@@ -247,7 +256,8 @@ class TransactionServiceTest {
 
     UserEntity userEntity = UserEntity.builder()
         .userId("test")
-        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .password(
+            "$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
         .build();
 
     // when
@@ -259,7 +269,8 @@ class TransactionServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.NOT_YOUR_ACCOUNT);
-      assertEquals(e.getErrorMessage(), ErrorCode.NOT_YOUR_ACCOUNT.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.NOT_YOUR_ACCOUNT.getDescription());
     }
   }
 
@@ -279,7 +290,8 @@ class TransactionServiceTest {
 
     UserEntity userEntity = UserEntity.builder()
         .userId("test")
-        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .password(
+            "$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
         .build();
 
     // when
@@ -290,7 +302,8 @@ class TransactionServiceTest {
       // then
     } catch (CustomException e) {
       assertEquals(e.getErrorCode(), ErrorCode.LEAST_AMOUNT);
-      assertEquals(e.getErrorMessage(), ErrorCode.LEAST_AMOUNT.getDescription());
+      assertEquals(e.getErrorMessage(),
+          ErrorCode.LEAST_AMOUNT.getDescription());
     }
   }
 
@@ -310,7 +323,8 @@ class TransactionServiceTest {
 
     UserEntity userEntity = UserEntity.builder()
         .userId("test")
-        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .password(
+            "$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
         .build();
 
     // when
@@ -342,7 +356,8 @@ class TransactionServiceTest {
 
     UserEntity userEntity = UserEntity.builder()
         .userId("test")
-        .password("$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
+        .password(
+            "$2a$10$kgFE0NZY/FI0t13b8aQbQOnainXRhCDJrC0tn5UaM5/fQ2G4WiVSO")
         .build();
 
     // when

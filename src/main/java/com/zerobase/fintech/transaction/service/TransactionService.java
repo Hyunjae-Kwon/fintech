@@ -30,14 +30,15 @@ public class TransactionService {
     AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
         .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
 
-    if(request.getAmount() <= 0) {
+    if (request.getAmount() <= 0) {
       throw new CustomException(ErrorCode.LEAST_AMOUNT);
     }
 
-    if(fromAccountNumber == null) {
+    if (fromAccountNumber == null) {
       request.setTransactionName("ATM");
     } else {
-      AccountEntity fromAccount = accountRepository.findByAccountNumber(fromAccountNumber)
+      AccountEntity fromAccount = accountRepository.findByAccountNumber(
+              fromAccountNumber)
           .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
       String name = fromAccount.getUserId().getName();
       request.setTransactionName(name);
@@ -60,35 +61,37 @@ public class TransactionService {
       String toAccountNumber,
       TransactionForm.Request request, UserEntity userEntity) {
 
-    if(!request.getUserId().equals(userEntity.getUserId())) {
+    if (!request.getUserId().equals(userEntity.getUserId())) {
       throw new CustomException(ErrorCode.USER_NOT_MATCH);
     }
 
-    if(!PasswordUtils.equals(request.getPassword(), userEntity.getPassword())) {
+    if (!PasswordUtils.equals(request.getPassword(),
+        userEntity.getPassword())) {
       throw new CustomException(ErrorCode.PASSWORD_INCORRECT);
     }
 
     AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
         .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
 
-    if(!account.getUserId().getUserId().equals(request.getUserId())) {
+    if (!account.getUserId().getUserId().equals(request.getUserId())) {
       throw new CustomException(ErrorCode.NOT_YOUR_ACCOUNT);
     }
 
-    if(request.getAmount() <= 0) {
+    if (request.getAmount() <= 0) {
       throw new CustomException(ErrorCode.LEAST_AMOUNT);
     }
 
-    if(request.getAmount() > account.getAmount()) {
+    if (request.getAmount() > account.getAmount()) {
       throw new CustomException(ErrorCode.LOW_AMOUNT);
     }
 
-    if(toAccountNumber == null) {
+    if (toAccountNumber == null) {
       request.setTransactionName("ATM");
     } else {
       AccountEntity toAccount =
           accountRepository.findByAccountNumber(toAccountNumber)
-          .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
+              .orElseThrow(
+                  () -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
       String name = toAccount.getUserId().getName();
       request.setTransactionName(name);
     }

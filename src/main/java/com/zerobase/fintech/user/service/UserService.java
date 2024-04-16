@@ -25,12 +25,12 @@ public class UserService implements UserDetailsService {
 
   public UserDto signUp(SignUpForm.Request request) {
     // 아이디 중복 확인
-    if(userRepository.existsByUserId(request.getUserId())) {
+    if (userRepository.existsByUserId(request.getUserId())) {
       throw new CustomException(ErrorCode.DUPLICATED_USERID);
     }
 
     //기가입 회원 정보 확인
-    if(userRepository.existsByNameAndBirth(request.getName(),
+    if (userRepository.existsByNameAndBirth(request.getName(),
         request.getBirth())) {
       throw new CustomException(ErrorCode.ALREADY_SIGNUP_USER);
     }
@@ -47,7 +47,7 @@ public class UserService implements UserDetailsService {
   public UserEntity authenticateUser(SignInForm form) {
     UserEntity user = userRepository.findByUserId(form.getUserId())
         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
-    if(!PasswordUtils.equals(form.getPassword(), user.getPassword())) {
+    if (!PasswordUtils.equals(form.getPassword(), user.getPassword())) {
       throw new CustomException(ErrorCode.PASSWORD_INCORRECT);
     }
 
@@ -57,7 +57,7 @@ public class UserService implements UserDetailsService {
   @Override
   public UserDetails loadUserByUsername(String userId) {
     log.info("Load User => USERID : {}", userId);
-    if(userRepository.existsByUserId(userId)) {
+    if (userRepository.existsByUserId(userId)) {
       return userRepository.findByUserId(userId)
           .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
     }

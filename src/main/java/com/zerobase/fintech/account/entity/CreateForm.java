@@ -14,6 +14,7 @@ public class CreateForm {
   @NoArgsConstructor
   @Builder
   public static class Request {
+
     private UserEntity userId;
 
     public static AccountEntity toEntity(UserEntity user,
@@ -32,6 +33,7 @@ public class CreateForm {
   @NoArgsConstructor
   @Builder
   public static class Response {
+
     private String accountNumber;
     private UserEntity userId;
 

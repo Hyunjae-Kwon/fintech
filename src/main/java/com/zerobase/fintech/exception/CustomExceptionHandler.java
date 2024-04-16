@@ -8,9 +8,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class CustomExceptionHandler {
 
-    @ExceptionHandler(CustomException.class)
-    protected ErrorResponse handleMyException(CustomException e){
-      return new ErrorResponse(e.getErrorCode());
-    }
+  @ExceptionHandler(CustomException.class)
+  protected ErrorResponse handleMyException(CustomException e) {
+    return new ErrorResponse(e.getErrorCode());
+  }
 
 }

@@ -37,14 +37,17 @@ public class TokenProvider {
   private SecretKey cachedSecretKey;
 
   // plain -> 시크릿 키 변환 method
-  private SecretKey TransferSecretKey( ) {
-    String keyBase64Encoded = Base64.getEncoder().encodeToString(secretKey.getBytes());
+  private SecretKey TransferSecretKey() {
+    String keyBase64Encoded = Base64.getEncoder()
+        .encodeToString(secretKey.getBytes());
     return Keys.hmacShaKeyFor(keyBase64Encoded.getBytes());
   }
 
   // 시크릿 키를 반환하는 method
   public SecretKey getSecretKey() {
-    if (cachedSecretKey == null) cachedSecretKey = TransferSecretKey();
+    if (cachedSecretKey == null) {
+      cachedSecretKey = TransferSecretKey();
+    }
 
     return cachedSecretKey;
   }
@@ -74,24 +77,26 @@ public class TokenProvider {
   // 토큰 유효성 검사
   public boolean validateToken(String token) {
     try {
-      if(!StringUtils.hasText(token)) return false;
+      if (!StringUtils.hasText(token)) {
+        return false;
+      }
       Claims claims = this.parseClaims(token);
       return !claims.getExpiration().before(new Date());
-    } catch(JwtException e) {
+    } catch (JwtException e) {
       throw new JwtException(e.getMessage());
     }
   }
 
-  private Claims parseClaims(String token){
-    try{
+  private Claims parseClaims(String token) {
+    try {
       return Jwts.parserBuilder()
           .setSigningKey(TransferSecretKey())
           .build()
           .parseClaimsJws(token)
           .getBody();
-    }catch (ExpiredJwtException e) {
+    } catch (ExpiredJwtException e) {
       throw new JwtException(ErrorCode.TOKEN_TIME_OUT.getDescription());
-    }catch (SignatureException e){
+    } catch (SignatureException e) {
       throw new JwtException(ErrorCode.JWT_TOKEN_WRONG_TYPE.getDescription());
     }
   }

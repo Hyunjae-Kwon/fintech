@@ -34,14 +34,15 @@ public class AccountController {
   public ResponseEntity<?> createAccount(
       @PathVariable(name = "userId") String userId,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
-    if(!userId.equals(userEntity.getUserId())) {
+  ) {
+    if (!userId.equals(userEntity.getUserId())) {
       throw new CustomException(ErrorCode.USER_NOT_FOUND);
     }
 
     String accountNumber = AccountUtils.createAccountNumber();
 
-    AccountDto createAccount = accountService.createAccount(userId, accountNumber);
+    AccountDto createAccount = accountService.createAccount(userId,
+        accountNumber);
 
     return ResponseEntity.ok(createAccount);
   }
@@ -51,8 +52,8 @@ public class AccountController {
   public ResponseEntity<?> deleteAccount(
       @RequestBody DeleteForm.Request request,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
-    if(!request.getUserId().equals(userEntity.getUserId())) {
+  ) {
+    if (!request.getUserId().equals(userEntity.getUserId())) {
       throw new CustomException(ErrorCode.USER_NOT_MATCH);
     }
 
@@ -66,7 +67,7 @@ public class AccountController {
   public ResponseEntity<?> getAllAccount(
       @RequestParam(value = "p", defaultValue = "0") Integer page,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
+  ) {
     Page<AccountDto> accounts =
         accountService.getAllAccount(userEntity.getUserId(), page);
 

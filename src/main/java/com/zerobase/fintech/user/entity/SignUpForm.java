@@ -13,6 +13,7 @@ public class SignUpForm {
   @NoArgsConstructor
   @Builder
   public static class Request {
+
     private String userId;
     private String password;
 
@@ -39,6 +40,7 @@ public class SignUpForm {
   @NoArgsConstructor
   @Builder
   public static class Response {
+
     private String userId;
     private String name;
     private String email;

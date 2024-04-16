@@ -29,13 +29,14 @@ public class TransactionController {
   public ResponseEntity<?> depositTransaction(
       @PathVariable(name = "accountNumber") String accountNumber,
       @RequestBody TransactionForm.Request request
-  ){
+  ) {
     String fromAccountNumber = null;
     TransactionDto depositTransaction =
         transactionService.depositTransaction(accountNumber, fromAccountNumber,
             request);
 
-    return ResponseEntity.ok(TransactionForm.Response.fromDepositDto(depositTransaction));
+    return ResponseEntity.ok(
+        TransactionForm.Response.fromDepositDto(depositTransaction));
   }
 
   @Operation(summary = "계좌 출금")
@@ -44,13 +45,14 @@ public class TransactionController {
       @PathVariable(name = "accountNumber") String accountNumber,
       @RequestBody TransactionForm.Request request,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
+  ) {
     String toAccountNumber = null;
     TransactionDto withdrawTransaction =
         transactionService.withdrawTransaction(accountNumber, toAccountNumber
             , request, userEntity);
 
-    return ResponseEntity.ok(TransactionForm.Response.fromWithdrawDto(withdrawTransaction));
+    return ResponseEntity.ok(
+        TransactionForm.Response.fromWithdrawDto(withdrawTransaction));
   }
 
   @Operation(summary = "계좌 송금")
@@ -60,7 +62,7 @@ public class TransactionController {
       @PathVariable(name = "toAccountNumber") String toAccountNumber,
       @RequestBody TransactionForm.Request request,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
+  ) {
     TransactionDto withdrawTransaction =
         transactionService.withdrawTransaction(accountNumber, toAccountNumber
             , request,
@@ -75,6 +77,7 @@ public class TransactionController {
           , request);
     }
 
-    return ResponseEntity.ok(TransactionForm.Response.fromWithdrawDto(withdrawTransaction));
+    return ResponseEntity.ok(
+        TransactionForm.Response.fromWithdrawDto(withdrawTransaction));
   }
 }

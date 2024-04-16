@@ -11,7 +11,8 @@ public class DeleteForm {
   @AllArgsConstructor
   @NoArgsConstructor
   @Builder
-  public static class Request{
+  public static class Request {
+
     private String userId;
     private String password;
     private String accountNumber;

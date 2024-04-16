@@ -30,7 +30,7 @@ public class AccountService {
     UserEntity user = userRepository.findByUserId(userId)
         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-    if(accountRepository.existsByAccountNumber(accountNumber)) {
+    if (accountRepository.existsByAccountNumber(accountNumber)) {
       throw new CustomException(ErrorCode.DUPLICATED_ACCOUNTNUMBER);
     }
 
@@ -46,17 +46,17 @@ public class AccountService {
     UserEntity user = userRepository.findByUserId(request.getUserId())
         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
-    if(!PasswordUtils.equals(request.getPassword(), user.getPassword())) {
+    if (!PasswordUtils.equals(request.getPassword(), user.getPassword())) {
       throw new CustomException(ErrorCode.PASSWORD_INCORRECT);
     }
 
     AccountDto account = this.findAccountInfo(request.getAccountNumber());
 
-    if(!request.getUserId().equals(account.getUserId().getUserId())) {
+    if (!request.getUserId().equals(account.getUserId().getUserId())) {
       throw new CustomException(ErrorCode.NOT_YOUR_ACCOUNT);
     }
 
-    if(account.getAmount() != 0) {
+    if (account.getAmount() != 0) {
       throw new CustomException(ErrorCode.ACCOUNT_NOT_EMPTY);
     }
 
@@ -81,7 +81,7 @@ public class AccountService {
     Page<AccountEntity> accounts = accountRepository.findByUserId(user,
         PageRequest.of(page, 5));
 
-    if(accounts.getSize() == 0) {
+    if (accounts.getSize() == 0) {
       throw new CustomException(ErrorCode.NOT_HAVE_ACCOUNT);
     }
 
