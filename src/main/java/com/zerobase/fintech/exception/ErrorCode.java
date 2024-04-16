@@ -14,6 +14,7 @@ public enum ErrorCode {
   USER_NOT_MATCH(HttpStatus.BAD_REQUEST.value(), "아이디가 일치하지 않습니다."),
   PASSWORD_INCORRECT(HttpStatus.CONFLICT.value(), "비밀번호가 일치하지 않습니다."),
 
+  USER_NOT_LOGIN(HttpStatus.BAD_REQUEST.value(), "로그인이 필요합니다."),
   TOKEN_TIME_OUT(HttpStatus.CONFLICT.value(), "토큰이 만료되었습니다."),
   JWT_TOKEN_WRONG_TYPE(HttpStatus.UNAUTHORIZED.value(), "JWT 토큰 형식에 문제가 있습니다."),
 

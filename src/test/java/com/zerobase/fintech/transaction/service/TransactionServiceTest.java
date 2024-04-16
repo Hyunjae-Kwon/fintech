@@ -341,8 +341,8 @@ class TransactionServiceTest {
   }
 
   @Test
-  @DisplayName("Transfer_Transaction_Success")
-  void transferTransaction() {
+  @DisplayName("Remittance_Transaction_Success")
+  void remittanceTransactionTest() {
     // given
     String accountNumber = "9583268840115";
     String toAccountNumber = "2361337411490";
@@ -350,7 +350,6 @@ class TransactionServiceTest {
         .amount(1000)
         .userId("test")
         .password("pw")
-        .transactionName("ATM")
         .verify(true)
         .build();
 
@@ -361,19 +360,16 @@ class TransactionServiceTest {
         .build();
 
     // when
-    TransactionDto withdrawDto =
-        transactionService.withdrawTransaction(accountNumber, toAccountNumber
+    TransactionDto remittanceTransaction =
+        transactionService.remittanceTransaction(accountNumber, toAccountNumber
             , request, userEntity);
 
-    transactionService.depositTransaction(toAccountNumber, accountNumber,
-        request);
-
     // then
-    log.info("Transaction ID : {}", withdrawDto.getTransactionId());
-    log.info("Create At : {}", withdrawDto.getCreateAt());
-    assertEquals(withdrawDto.getWithdraw(), 1000);
-    assertEquals(withdrawDto.getTransactionName(), "test2");
-    assertTrue(withdrawDto.isVerify());
-    assertNotNull(withdrawDto.getAccountNumber());
+    log.info("Transaction ID : {}", remittanceTransaction.getTransactionId());
+    log.info("Create At : {}", remittanceTransaction.getCreateAt());
+    assertEquals(remittanceTransaction.getWithdraw(), 1000);
+    assertEquals(remittanceTransaction.getTransactionName(), "테스트2");
+    assertTrue(remittanceTransaction.isVerify());
+    assertNotNull(remittanceTransaction.getAccountNumber());
   }
 }

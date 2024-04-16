@@ -34,7 +34,7 @@ public class TransactionService {
       throw new CustomException(ErrorCode.LEAST_AMOUNT);
     }
 
-    if (fromAccountNumber == null) {
+    if (fromAccountNumber.isBlank()) {
       request.setTransactionName("ATM");
     } else {
       AccountEntity fromAccount = accountRepository.findByAccountNumber(
@@ -61,6 +61,10 @@ public class TransactionService {
       String toAccountNumber,
       TransactionForm.Request request, UserEntity userEntity) {
 
+    if (userEntity == null) {
+      throw new CustomException(ErrorCode.USER_NOT_LOGIN);
+    }
+
     if (!request.getUserId().equals(userEntity.getUserId())) {
       throw new CustomException(ErrorCode.USER_NOT_MATCH);
     }
@@ -85,7 +89,7 @@ public class TransactionService {
       throw new CustomException(ErrorCode.LOW_AMOUNT);
     }
 
-    if (toAccountNumber == null) {
+    if (toAccountNumber.isBlank()) {
       request.setTransactionName("ATM");
     } else {
       AccountEntity toAccount =
@@ -107,5 +111,18 @@ public class TransactionService {
     );
 
     return TransactionDto.from(withdraw);
+  }
+
+  public TransactionDto remittanceTransaction(
+      String accountNumber, String toAccountNumber,
+      TransactionForm.Request request, UserEntity userEntity
+  ) {
+    TransactionDto remittance = withdrawTransaction(
+        accountNumber, toAccountNumber, request, userEntity
+    );
+
+    depositTransaction(toAccountNumber, accountNumber, request);
+
+    return remittance;
   }
 }
