@@ -19,7 +19,7 @@ public class WithdrawForm {
 
     private AccountEntity accountNumber;
 
-    @Positive(message = "0원 이상의 금액을 입력하세요.")
+    @Positive(message = "1원 이상의 금액을 입력하세요.")
     private int amount;
 
     @NotBlank(message = "아이디를 입력하세요.")

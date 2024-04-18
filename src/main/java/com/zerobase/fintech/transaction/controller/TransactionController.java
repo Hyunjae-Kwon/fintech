@@ -8,7 +8,6 @@ import com.zerobase.fintech.transaction.service.TransactionService;
 import com.zerobase.fintech.user.entity.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.Null;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +32,10 @@ public class TransactionController {
   public ResponseEntity<?> depositTransaction(
       @Pattern(regexp = "\\d{13}", message = "계좌번호는 13자리 숫자여야 합니다.")
       @RequestParam(value = "accountNumber") String accountNumber,
-      @Null String fromAccountNumber,
       @Validated @RequestBody DepositForm.Request request
   ) {
     TransactionDto depositTransaction =
-        transactionService.depositTransaction(accountNumber, fromAccountNumber,
+        transactionService.depositTransaction(accountNumber, null,
             request);
 
     return ResponseEntity.ok(
@@ -49,12 +47,11 @@ public class TransactionController {
   public ResponseEntity<?> withdrawTransaction(
       @Pattern(regexp = "\\d{13}", message = "계좌번호는 13자리 숫자여야 합니다.")
       @RequestParam(value = "accountNumber") String accountNumber,
-      @Null String toAccountNumber,
       @Validated @RequestBody WithdrawForm.Request request,
       @AuthenticationPrincipal UserEntity userEntity
   ) {
     TransactionDto withdrawTransaction =
-        transactionService.withdrawTransaction(accountNumber, toAccountNumber
+        transactionService.withdrawTransaction(accountNumber, null
             , request, userEntity);
 
     return ResponseEntity.ok(
