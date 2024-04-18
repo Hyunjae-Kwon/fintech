@@ -5,9 +5,11 @@ import com.zerobase.fintech.account.entity.AccountEntity;
 import com.zerobase.fintech.exception.CustomException;
 import com.zerobase.fintech.exception.ErrorCode;
 import com.zerobase.fintech.transaction.dao.TransactionRepository;
+import com.zerobase.fintech.transaction.entity.DepositForm;
 import com.zerobase.fintech.transaction.entity.TransactionDto;
 import com.zerobase.fintech.transaction.entity.TransactionEntity;
-import com.zerobase.fintech.transaction.entity.TransactionForm;
+import com.zerobase.fintech.transaction.entity.RemittanceForm;
+import com.zerobase.fintech.transaction.entity.WithdrawForm;
 import com.zerobase.fintech.user.entity.UserEntity;
 import com.zerobase.fintech.util.PasswordUtils;
 import jakarta.transaction.Transactional;
@@ -24,34 +26,28 @@ public class TransactionService {
   private final TransactionRepository transactionRepository;
   private final AccountRepository accountRepository;
 
-  public TransactionDto depositTransaction(String accountNumber,
-      String fromAccountNumber, TransactionForm.Request request) {
+  public TransactionDto depositTransaction(
+      String accountNumber,
+      String fromAccountNumber, DepositForm.Request request) {
 
     AccountEntity account = accountRepository.findByAccountNumber(accountNumber)
         .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
 
-    if (request.getAmount() <= 0) {
-      throw new CustomException(ErrorCode.LEAST_AMOUNT);
-    }
-
-    if (fromAccountNumber.isBlank()) {
-      request.setTransactionName("ATM");
-    } else {
-      AccountEntity fromAccount = accountRepository.findByAccountNumber(
-              fromAccountNumber)
-          .orElseThrow(() -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
-      String name = fromAccount.getUserId().getName();
+    if (fromAccountNumber != null) {
+      String name = getNameByAccountNumber(fromAccountNumber);
       request.setTransactionName(name);
+    } else {
+      request.setTransactionName("ATM");
     }
 
-    request.setToAccountNumber(account);
+    request.setAccountNumber(account);
 
     account.edit(account.getAmount() + request.getAmount());
 
     accountRepository.save(account);
 
     TransactionEntity deposit = transactionRepository.save(
-        TransactionForm.Request.toDepositEntity(request)
+        DepositForm.Request.toEntity(request)
     );
 
     return TransactionDto.from(deposit);
@@ -59,7 +55,7 @@ public class TransactionService {
 
   public TransactionDto withdrawTransaction(String accountNumber,
       String toAccountNumber,
-      TransactionForm.Request request, UserEntity userEntity) {
+      WithdrawForm.Request request, UserEntity userEntity) {
 
     if (userEntity == null) {
       throw new CustomException(ErrorCode.USER_NOT_LOGIN);
@@ -81,23 +77,15 @@ public class TransactionService {
       throw new CustomException(ErrorCode.NOT_YOUR_ACCOUNT);
     }
 
-    if (request.getAmount() <= 0) {
-      throw new CustomException(ErrorCode.LEAST_AMOUNT);
-    }
-
     if (request.getAmount() > account.getAmount()) {
       throw new CustomException(ErrorCode.LOW_AMOUNT);
     }
 
-    if (toAccountNumber.isBlank()) {
-      request.setTransactionName("ATM");
-    } else {
-      AccountEntity toAccount =
-          accountRepository.findByAccountNumber(toAccountNumber)
-              .orElseThrow(
-                  () -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
-      String name = toAccount.getUserId().getName();
+    if (toAccountNumber != null) {
+      String name = getNameByAccountNumber(toAccountNumber);
       request.setTransactionName(name);
+    } else {
+      request.setTransactionName("ATM");
     }
 
     request.setAccountNumber(account);
@@ -107,7 +95,7 @@ public class TransactionService {
     accountRepository.save(account);
 
     TransactionEntity withdraw = transactionRepository.save(
-        TransactionForm.Request.toWithdrawEntity(request)
+        WithdrawForm.Request.toEntity(request)
     );
 
     return TransactionDto.from(withdraw);
@@ -115,14 +103,33 @@ public class TransactionService {
 
   public TransactionDto remittanceTransaction(
       String accountNumber, String toAccountNumber,
-      TransactionForm.Request request, UserEntity userEntity
+      RemittanceForm.Request request, UserEntity userEntity
   ) {
+    DepositForm.Request deposit = DepositForm.Request.builder()
+        .amount(request.getAmount())
+        .build();
+
+    WithdrawForm.Request withdraw = WithdrawForm.Request.builder()
+        .amount(request.getAmount())
+        .userId(request.getUserId())
+        .password(request.getPassword())
+        .build();
+
     TransactionDto remittance = withdrawTransaction(
-        accountNumber, toAccountNumber, request, userEntity
+        accountNumber, toAccountNumber, withdraw, userEntity
     );
 
-    depositTransaction(toAccountNumber, accountNumber, request);
+    depositTransaction(toAccountNumber, accountNumber, deposit);
 
     return remittance;
+  }
+
+  public String getNameByAccountNumber(String accountNumber) {
+    AccountEntity toAccount =
+        accountRepository.findByAccountNumber(accountNumber)
+            .orElseThrow(
+                () -> new CustomException(ErrorCode.ACCOUNT_NOT_FOUND));
+
+    return toAccount.getUserId().getName();
   }
 }

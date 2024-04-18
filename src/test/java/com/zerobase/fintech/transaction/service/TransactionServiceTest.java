@@ -6,8 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.zerobase.fintech.account.service.AccountService;
 import com.zerobase.fintech.exception.CustomException;
 import com.zerobase.fintech.exception.ErrorCode;
+import com.zerobase.fintech.transaction.entity.DepositForm;
 import com.zerobase.fintech.transaction.entity.TransactionDto;
-import com.zerobase.fintech.transaction.entity.TransactionForm;
+import com.zerobase.fintech.transaction.entity.RemittanceForm;
+import com.zerobase.fintech.transaction.entity.WithdrawForm;
 import com.zerobase.fintech.user.entity.UserEntity;
 import com.zerobase.fintech.user.service.UserService;
 import jakarta.transaction.Transactional;
@@ -37,7 +39,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "9583268840115";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    DepositForm.Request request = DepositForm.Request.builder()
         .amount(10000)
         .verify(true)
         .build();
@@ -62,7 +64,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "1234567890123";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    DepositForm.Request request = DepositForm.Request.builder()
         .amount(10000)
         .transactionName("ATM")
         .verify(true)
@@ -87,7 +89,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "9583268840115";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    DepositForm.Request request = DepositForm.Request.builder()
         .amount(0)
         .transactionName("ATM")
         .verify(true)
@@ -112,7 +114,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "9583268840115";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    WithdrawForm.Request request = WithdrawForm.Request.builder()
         .amount(1000)
         .userId("test")
         .password("pw")
@@ -146,7 +148,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "9583268840115";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    WithdrawForm.Request request = WithdrawForm.Request.builder()
         .amount(1000)
         .userId("test1")
         .password("pw")
@@ -179,7 +181,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "9583268840115";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    WithdrawForm.Request request = WithdrawForm.Request.builder()
         .amount(1000)
         .userId("test")
         .password("pw1")
@@ -212,7 +214,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "0123456789012";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    WithdrawForm.Request request = WithdrawForm.Request.builder()
         .amount(1000)
         .userId("test")
         .password("pw")
@@ -246,7 +248,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "2361337411490";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    WithdrawForm.Request request = WithdrawForm.Request.builder()
         .amount(1000)
         .userId("test")
         .password("pw")
@@ -280,7 +282,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "9583268840115";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    WithdrawForm.Request request = WithdrawForm.Request.builder()
         .amount(0)
         .userId("test")
         .password("pw")
@@ -313,7 +315,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "9583268840115";
     String emptyAccountNumber = null;
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    WithdrawForm.Request request = WithdrawForm.Request.builder()
         .amount(100000)
         .userId("test")
         .password("pw")
@@ -346,7 +348,7 @@ class TransactionServiceTest {
     // given
     String accountNumber = "9583268840115";
     String toAccountNumber = "2361337411490";
-    TransactionForm.Request request = TransactionForm.Request.builder()
+    RemittanceForm.Request request = RemittanceForm.Request.builder()
         .amount(1000)
         .userId("test")
         .password("pw")

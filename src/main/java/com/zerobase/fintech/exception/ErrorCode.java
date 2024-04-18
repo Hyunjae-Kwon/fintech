@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorCode {
 
+  INVALID_INPUT(HttpStatus.BAD_REQUEST.value(), "필수 입력 값이 누락되었습니다."),
+  INVALID_PATTERN(HttpStatus.BAD_REQUEST.value(), "형식에 맞게 입력 해야합니다."),
+
   DUPLICATED_USERID(HttpStatus.CONFLICT.value(), "이미 존재하는 아이디입니다."),
   ALREADY_SIGNUP_USER(HttpStatus.CONFLICT.value(), "이미 가입한 회원 정보입니다."),
   USER_NOT_FOUND(HttpStatus.BAD_REQUEST.value(), "해당 유저가 존재하지 않습니다."),
