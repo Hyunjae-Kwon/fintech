@@ -10,6 +10,7 @@ import com.zerobase.fintech.user.entity.UserEntity;
 import com.zerobase.fintech.util.AccountUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -34,6 +35,7 @@ public class AccountController {
   @Operation(summary = "계좌 생성")
   @PostMapping("/account/create/{userId}")
   public ResponseEntity<?> createAccount(
+      @NotBlank(message = "아이디를 입력하세요.")
       @PathVariable(name = "userId") String userId,
       @AuthenticationPrincipal UserEntity userEntity
   ) {

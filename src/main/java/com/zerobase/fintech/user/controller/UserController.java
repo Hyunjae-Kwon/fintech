@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,8 @@ public class UserController {
 
   @Operation(summary = "회원가입")
   @PostMapping("/user/signUp")
-  public ResponseEntity<?> signUpUser(@RequestBody SignUpForm request) {
+  public ResponseEntity<?> signUpUser(
+      @Validated  @RequestBody SignUpForm request) {
     SignUpForm signedUpUser = userService.signUp(request);
 
     return ResponseEntity.ok(signedUpUser);
@@ -34,7 +36,7 @@ public class UserController {
 
   @Operation(summary = "회원 로그인")
   @PostMapping("/user/signIn")
-  public ResponseEntity<?> signInUser(@RequestBody SignInForm form) {
+  public ResponseEntity<?> signInUser(@Validated @RequestBody SignInForm form) {
     UserEntity signInUser = userService.authenticateUser(form);
 
     String token = tokenProvider.generateToken(signInUser.getUserId());
