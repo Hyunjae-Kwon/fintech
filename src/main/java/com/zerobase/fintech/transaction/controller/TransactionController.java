@@ -1,19 +1,21 @@
 package com.zerobase.fintech.transaction.controller;
 
-import com.zerobase.fintech.exception.CustomException;
-import com.zerobase.fintech.transaction.entity.TransactionDto;
-import com.zerobase.fintech.transaction.entity.TransactionForm;
+import com.zerobase.fintech.transaction.entity.DepositForm;
+import com.zerobase.fintech.transaction.entity.RemittanceForm;
+import com.zerobase.fintech.transaction.entity.WithdrawForm;
 import com.zerobase.fintech.transaction.service.TransactionService;
 import com.zerobase.fintech.user.entity.UserEntity;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
@@ -25,56 +27,49 @@ public class TransactionController {
   private final TransactionService transactionService;
 
   @Operation(summary = "계좌 입금")
-  @PostMapping("/transaction/deposit/{accountNumber}")
+  @PostMapping("/transaction/deposit")
   public ResponseEntity<?> depositTransaction(
-      @PathVariable(name = "accountNumber") String accountNumber,
-      @RequestBody TransactionForm.Request request
-  ){
-    String fromAccountNumber = null;
-    TransactionDto depositTransaction =
-        transactionService.depositTransaction(accountNumber, fromAccountNumber,
-            request);
+      @Pattern(regexp = "\\d{13}", message = "계좌번호는 13자리 숫자여야 합니다.")
+      @RequestParam(value = "accountNumber") String accountNumber,
+      @Validated @RequestBody DepositForm request
+  ) {
+    DepositForm depositTransaction =
+        transactionService.depositTransaction(
+            accountNumber, null, request);
 
-    return ResponseEntity.ok(TransactionForm.Response.fromDepositDto(depositTransaction));
+    return ResponseEntity.ok(depositTransaction);
   }
 
   @Operation(summary = "계좌 출금")
-  @PostMapping("/transaction/withdraw/{accountNumber}")
+  @PostMapping("/transaction/withdraw")
   public ResponseEntity<?> withdrawTransaction(
-      @PathVariable(name = "accountNumber") String accountNumber,
-      @RequestBody TransactionForm.Request request,
+      @Pattern(regexp = "\\d{13}", message = "계좌번호는 13자리 숫자여야 합니다.")
+      @RequestParam(value = "accountNumber") String accountNumber,
+      @Validated @RequestBody WithdrawForm request,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
-    String toAccountNumber = null;
-    TransactionDto withdrawTransaction =
-        transactionService.withdrawTransaction(accountNumber, toAccountNumber
-            , request, userEntity);
+  ) {
+    WithdrawForm withdrawTransaction =
+        transactionService.withdrawTransaction(
+            accountNumber, null, request, userEntity);
 
-    return ResponseEntity.ok(TransactionForm.Response.fromWithdrawDto(withdrawTransaction));
+    return ResponseEntity.ok(withdrawTransaction);
   }
 
   @Operation(summary = "계좌 송금")
-  @PostMapping("/transaction/transfer/{accountNumber}&{toAccountNumber}")
-  public ResponseEntity<?> transferTransaction(
-      @PathVariable(name = "accountNumber") String accountNumber,
-      @PathVariable(name = "toAccountNumber") String toAccountNumber,
-      @RequestBody TransactionForm.Request request,
+  @PostMapping("/transaction/remittance")
+  public ResponseEntity<?> remittanceTransaction(
+      @Pattern(regexp = "\\d{13}", message = "계좌번호는 13자리 숫자여야 합니다.")
+      @RequestParam(value = "accountNumber") String accountNumber,
+      @Pattern(regexp = "\\d{13}", message = "계좌번호는 13자리 숫자여야 합니다.")
+      @RequestParam(value = "toAccountNumber") String toAccountNumber,
+      @Validated @RequestBody RemittanceForm request,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
-    TransactionDto withdrawTransaction =
-        transactionService.withdrawTransaction(accountNumber, toAccountNumber
-            , request,
-            userEntity);
+  ) {
 
-    String emptyAccountNumber = null;
-    try {
-      transactionService.depositTransaction(toAccountNumber,
-          accountNumber, request);
-    } catch (CustomException e) {
-      transactionService.depositTransaction(accountNumber, emptyAccountNumber
-          , request);
-    }
+    WithdrawForm remittanceTransaction =
+        transactionService.remittanceTransaction(accountNumber,
+            toAccountNumber, request, userEntity);
 
-    return ResponseEntity.ok(TransactionForm.Response.fromWithdrawDto(withdrawTransaction));
+    return ResponseEntity.ok(remittanceTransaction);
   }
 }

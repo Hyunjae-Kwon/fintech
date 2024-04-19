@@ -1,6 +1,7 @@
 package com.zerobase.fintech.account.controller;
 
 import com.zerobase.fintech.account.entity.AccountDto;
+import com.zerobase.fintech.account.entity.CreateForm;
 import com.zerobase.fintech.account.entity.DeleteForm;
 import com.zerobase.fintech.account.service.AccountService;
 import com.zerobase.fintech.exception.CustomException;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,14 +36,15 @@ public class AccountController {
   public ResponseEntity<?> createAccount(
       @PathVariable(name = "userId") String userId,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
-    if(!userId.equals(userEntity.getUserId())) {
+  ) {
+    if (!userId.equals(userEntity.getUserId())) {
       throw new CustomException(ErrorCode.USER_NOT_FOUND);
     }
 
     String accountNumber = AccountUtils.createAccountNumber();
 
-    AccountDto createAccount = accountService.createAccount(userId, accountNumber);
+    CreateForm createAccount = accountService.createAccount(userId,
+        accountNumber);
 
     return ResponseEntity.ok(createAccount);
   }
@@ -49,10 +52,10 @@ public class AccountController {
   @Operation(summary = "계좌 삭제")
   @PostMapping("/account/delete")
   public ResponseEntity<?> deleteAccount(
-      @RequestBody DeleteForm.Request request,
+      @Validated @RequestBody DeleteForm request,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
-    if(!request.getUserId().equals(userEntity.getUserId())) {
+  ) {
+    if (!request.getUserId().equals(userEntity.getUserId())) {
       throw new CustomException(ErrorCode.USER_NOT_MATCH);
     }
 
@@ -66,11 +69,10 @@ public class AccountController {
   public ResponseEntity<?> getAllAccount(
       @RequestParam(value = "p", defaultValue = "0") Integer page,
       @AuthenticationPrincipal UserEntity userEntity
-  ){
+  ) {
     Page<AccountDto> accounts =
         accountService.getAllAccount(userEntity.getUserId(), page);
 
     return ResponseEntity.ok(accounts);
   }
-
 }

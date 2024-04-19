@@ -8,14 +8,16 @@ import lombok.Setter;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter @Setter
-public class CustomException extends RuntimeException{
-    private ErrorCode errorCode;
-    private String errorMessage;
+@Getter
+@Setter
+public class CustomException extends RuntimeException {
 
-    public CustomException(ErrorCode errorCode){
-        super(errorCode.getDescription());
-        this.errorCode = errorCode;
-        this.errorMessage = errorCode.getDescription();
-    }
+  private ErrorCode errorCode;
+  private String errorMessage;
+
+  public CustomException(ErrorCode errorCode) {
+    super(errorCode.getDescription());
+    this.errorCode = errorCode;
+    this.errorMessage = errorCode.getDescription();
+  }
 }
