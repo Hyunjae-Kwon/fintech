@@ -26,7 +26,7 @@ public class AccountService {
   private final AccountRepository accountRepository;
   private final UserRepository userRepository;
 
-  public AccountDto createAccount(String userId, String accountNumber) {
+  public CreateForm createAccount(String userId, String accountNumber) {
     UserEntity user = userRepository.findByUserId(userId)
         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
@@ -35,13 +35,13 @@ public class AccountService {
     }
 
     AccountEntity createAccount = accountRepository.save(
-        CreateForm.Request.toEntity(user, accountNumber)
+        CreateForm.toEntity(user, accountNumber)
     );
 
-    return AccountDto.from(createAccount);
+    return CreateForm.fromDto(createAccount);
   }
 
-  public void deleteAccount(DeleteForm.Request request) {
+  public void deleteAccount(DeleteForm request) {
 
     UserEntity user = userRepository.findByUserId(request.getUserId())
         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
@@ -52,7 +52,7 @@ public class AccountService {
 
     AccountDto account = this.findAccountInfo(request.getAccountNumber());
 
-    if (!request.getUserId().equals(account.getUserId().getUserId())) {
+    if (!request.getUserId().equals(account.getUserId())) {
       throw new CustomException(ErrorCode.NOT_YOUR_ACCOUNT);
     }
 

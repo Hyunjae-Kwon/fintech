@@ -1,6 +1,7 @@
 package com.zerobase.fintech.account.controller;
 
 import com.zerobase.fintech.account.entity.AccountDto;
+import com.zerobase.fintech.account.entity.CreateForm;
 import com.zerobase.fintech.account.entity.DeleteForm;
 import com.zerobase.fintech.account.service.AccountService;
 import com.zerobase.fintech.exception.CustomException;
@@ -42,7 +43,7 @@ public class AccountController {
 
     String accountNumber = AccountUtils.createAccountNumber();
 
-    AccountDto createAccount = accountService.createAccount(userId,
+    CreateForm createAccount = accountService.createAccount(userId,
         accountNumber);
 
     return ResponseEntity.ok(createAccount);
@@ -51,7 +52,7 @@ public class AccountController {
   @Operation(summary = "계좌 삭제")
   @PostMapping("/account/delete")
   public ResponseEntity<?> deleteAccount(
-      @Validated @RequestBody DeleteForm.Request request,
+      @Validated @RequestBody DeleteForm request,
       @AuthenticationPrincipal UserEntity userEntity
   ) {
     if (!request.getUserId().equals(userEntity.getUserId())) {

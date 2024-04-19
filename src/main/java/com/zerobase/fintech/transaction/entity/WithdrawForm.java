@@ -9,58 +9,46 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class WithdrawForm {
 
-  @Data
-  @AllArgsConstructor
-  @NoArgsConstructor
-  @Builder
-  public static class Request {
+  private String accountNumber;
 
-    private AccountEntity accountNumber;
+  @Positive(message = "1원 이상의 금액을 입력하세요.")
+  private int withdraw;
 
-    @Positive(message = "1원 이상의 금액을 입력하세요.")
-    private int amount;
+  @NotBlank(message = "아이디를 입력하세요.")
+  private String userId;
 
-    @NotBlank(message = "아이디를 입력하세요.")
-    private String userId;
+  @NotBlank(message = "비밀번호를 입력하세요.")
+  private String password;
 
-    @NotBlank(message = "비밀번호를 입력하세요.")
-    private String password;
+  private int balance;
+  private String transactionName;
+  private boolean verify;
+  private LocalDateTime createAt;
 
-    private String transactionName;
-    private boolean verify;
-    private LocalDateTime createAt;
-
-    public static TransactionEntity toEntity(Request request) {
-      return TransactionEntity.builder()
-          .accountNumber(request.getAccountNumber())
-          .withdraw(request.getAmount())
-          .transactionName(request.getTransactionName())
-          .verify(true)
-          .createAt(LocalDateTime.now())
-          .build();
-    }
+  public static TransactionEntity toEntity(WithdrawForm request,
+      AccountEntity accountEntity) {
+    return TransactionEntity.builder()
+        .accountNumber(accountEntity)
+        .withdraw(request.getWithdraw())
+        .transactionName(request.getTransactionName())
+        .verify(true)
+        .createAt(LocalDateTime.now())
+        .build();
   }
 
-  @Data
-  @AllArgsConstructor
-  @NoArgsConstructor
-  @Builder
-  public static class Response {
-
-    private AccountEntity accountNumber;
-    private int amount;
-    private String transactionName;
-    private LocalDateTime createAt;
-
-    public static Response fromDto(TransactionDto transactionDto) {
-      return Response.builder()
-          .accountNumber(transactionDto.getAccountNumber())
-          .amount(transactionDto.getDeposit())
-          .transactionName(transactionDto.getTransactionName())
-          .createAt(transactionDto.getCreateAt())
-          .build();
-    }
+  public static WithdrawForm fromDto(TransactionEntity transactionEntity) {
+    return WithdrawForm.builder()
+        .accountNumber(transactionEntity.getAccountNumber().getAccountNumber())
+        .withdraw(transactionEntity.getWithdraw())
+        .balance(transactionEntity.getAccountNumber().getAmount())
+        .transactionName(transactionEntity.getTransactionName())
+        .createAt(transactionEntity.getCreateAt())
+        .build();
   }
 }

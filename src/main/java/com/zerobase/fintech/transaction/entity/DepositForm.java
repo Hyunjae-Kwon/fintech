@@ -8,52 +8,38 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class DepositForm {
 
-  @Data
-  @AllArgsConstructor
-  @NoArgsConstructor
-  @Builder
-  public static class Request {
+  private String accountNumber;
 
-    private AccountEntity accountNumber;
+  @Positive(message = "1원 이상의 금액을 입력하세요.")
+  private int deposit;
 
-    @Positive(message = "1원 이상의 금액을 입력하세요.")
-    private int amount;
+  private String transactionName;
+  private boolean verify;
+  private LocalDateTime createAt;
 
-    private String transactionName;
-    private boolean verify;
-    private LocalDateTime createAt;
-
-    public static TransactionEntity toEntity(Request request) {
-      return TransactionEntity.builder()
-          .accountNumber(request.getAccountNumber())
-          .deposit(request.getAmount())
-          .transactionName(request.getTransactionName())
-          .verify(true)
-          .createAt(LocalDateTime.now())
-          .build();
-    }
+  public static TransactionEntity toEntity(DepositForm request,
+      AccountEntity accountEntity) {
+    return TransactionEntity.builder()
+        .accountNumber(accountEntity)
+        .deposit(request.getDeposit())
+        .transactionName(request.getTransactionName())
+        .verify(true)
+        .createAt(LocalDateTime.now())
+        .build();
   }
 
-  @Data
-  @AllArgsConstructor
-  @NoArgsConstructor
-  @Builder
-  public static class Response {
-
-    private AccountEntity accountNumber;
-    private int amount;
-    private String transactionName;
-    private LocalDateTime createAt;
-
-    public static Response fromDto(TransactionDto transactionDto) {
-      return Response.builder()
-          .accountNumber(transactionDto.getAccountNumber())
-          .amount(transactionDto.getDeposit())
-          .transactionName(transactionDto.getTransactionName())
-          .createAt(transactionDto.getCreateAt())
-          .build();
-    }
+  public static DepositForm fromDto(TransactionEntity transactionEntity) {
+    return DepositForm.builder()
+        .accountNumber(transactionEntity.getAccountNumber().getAccountNumber())
+        .deposit(transactionEntity.getDeposit())
+        .transactionName(transactionEntity.getTransactionName())
+        .createAt(transactionEntity.getCreateAt())
+        .build();
   }
 }

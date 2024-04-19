@@ -4,7 +4,6 @@ import com.zerobase.fintech.auth.security.TokenProvider;
 import com.zerobase.fintech.auth.dto.AuthResponse;
 import com.zerobase.fintech.user.entity.SignInForm;
 import com.zerobase.fintech.user.entity.SignUpForm;
-import com.zerobase.fintech.user.entity.UserDto;
 import com.zerobase.fintech.user.entity.UserEntity;
 import com.zerobase.fintech.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,10 +26,10 @@ public class UserController {
 
   @Operation(summary = "회원가입")
   @PostMapping("/user/signUp")
-  public ResponseEntity<?> signUpUser(@RequestBody SignUpForm.Request request) {
-    UserDto signedUpUser = userService.signUp(request);
+  public ResponseEntity<?> signUpUser(@RequestBody SignUpForm request) {
+    SignUpForm signedUpUser = userService.signUp(request);
 
-    return ResponseEntity.ok(SignUpForm.Response.fromDto(signedUpUser));
+    return ResponseEntity.ok(signedUpUser);
   }
 
   @Operation(summary = "회원 로그인")

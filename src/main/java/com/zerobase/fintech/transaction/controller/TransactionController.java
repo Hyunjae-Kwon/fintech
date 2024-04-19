@@ -1,7 +1,6 @@
 package com.zerobase.fintech.transaction.controller;
 
 import com.zerobase.fintech.transaction.entity.DepositForm;
-import com.zerobase.fintech.transaction.entity.TransactionDto;
 import com.zerobase.fintech.transaction.entity.RemittanceForm;
 import com.zerobase.fintech.transaction.entity.WithdrawForm;
 import com.zerobase.fintech.transaction.service.TransactionService;
@@ -32,14 +31,13 @@ public class TransactionController {
   public ResponseEntity<?> depositTransaction(
       @Pattern(regexp = "\\d{13}", message = "계좌번호는 13자리 숫자여야 합니다.")
       @RequestParam(value = "accountNumber") String accountNumber,
-      @Validated @RequestBody DepositForm.Request request
+      @Validated @RequestBody DepositForm request
   ) {
-    TransactionDto depositTransaction =
-        transactionService.depositTransaction(accountNumber, null,
-            request);
+    DepositForm depositTransaction =
+        transactionService.depositTransaction(
+            accountNumber, null, request);
 
-    return ResponseEntity.ok(
-        DepositForm.Response.fromDto(depositTransaction));
+    return ResponseEntity.ok(depositTransaction);
   }
 
   @Operation(summary = "계좌 출금")
@@ -47,15 +45,14 @@ public class TransactionController {
   public ResponseEntity<?> withdrawTransaction(
       @Pattern(regexp = "\\d{13}", message = "계좌번호는 13자리 숫자여야 합니다.")
       @RequestParam(value = "accountNumber") String accountNumber,
-      @Validated @RequestBody WithdrawForm.Request request,
+      @Validated @RequestBody WithdrawForm request,
       @AuthenticationPrincipal UserEntity userEntity
   ) {
-    TransactionDto withdrawTransaction =
-        transactionService.withdrawTransaction(accountNumber, null
-            , request, userEntity);
+    WithdrawForm withdrawTransaction =
+        transactionService.withdrawTransaction(
+            accountNumber, null, request, userEntity);
 
-    return ResponseEntity.ok(
-        WithdrawForm.Response.fromDto(withdrawTransaction));
+    return ResponseEntity.ok(withdrawTransaction);
   }
 
   @Operation(summary = "계좌 송금")
@@ -65,15 +62,14 @@ public class TransactionController {
       @RequestParam(value = "accountNumber") String accountNumber,
       @Pattern(regexp = "\\d{13}", message = "계좌번호는 13자리 숫자여야 합니다.")
       @RequestParam(value = "toAccountNumber") String toAccountNumber,
-      @Validated @RequestBody RemittanceForm.Request request,
+      @Validated @RequestBody RemittanceForm request,
       @AuthenticationPrincipal UserEntity userEntity
   ) {
 
-    TransactionDto remittanceTransaction =
+    WithdrawForm remittanceTransaction =
         transactionService.remittanceTransaction(accountNumber,
             toAccountNumber, request, userEntity);
 
-    return ResponseEntity.ok(
-        RemittanceForm.Response.fromDto(remittanceTransaction));
+    return ResponseEntity.ok(remittanceTransaction);
   }
 }

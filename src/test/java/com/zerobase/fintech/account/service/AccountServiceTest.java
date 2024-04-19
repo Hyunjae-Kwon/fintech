@@ -3,6 +3,7 @@ package com.zerobase.fintech.account.service;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.zerobase.fintech.account.entity.AccountDto;
+import com.zerobase.fintech.account.entity.CreateForm;
 import com.zerobase.fintech.account.entity.DeleteForm;
 import com.zerobase.fintech.exception.CustomException;
 import com.zerobase.fintech.exception.ErrorCode;
@@ -34,14 +35,14 @@ class AccountServiceTest {
     String accountNumber = "0123456789123";
 
     // when
-    AccountDto createAccount = accountService.createAccount(userId,
+    CreateForm createForm = accountService.createAccount(userId,
         accountNumber);
 
     // then
-    log.info("Create At : {}", createAccount.getCreateAt());
-    assertEquals(createAccount.getAmount(), 0);
-    assertEquals(createAccount.getAccountNumber(), "0123456789123");
-    assertNotNull(createAccount.getUserId());
+    log.info("Create At : {}", createForm.getCreateAt());
+    assertEquals(createForm.getAmount(), 0);
+    assertEquals(createForm.getAccountNumber(), "0123456789123");
+    assertNotNull(createForm.getUserId());
   }
 
   @Test
@@ -86,7 +87,7 @@ class AccountServiceTest {
   @DisplayName("Delete_Account_Success")
   void deleteAccount() {
     // given
-    DeleteForm.Request request = DeleteForm.Request.builder()
+    DeleteForm request = DeleteForm.builder()
         .userId("test")
         .password("pw")
         .accountNumber("4489931284069")
@@ -109,7 +110,7 @@ class AccountServiceTest {
   @DisplayName("Delete_Account_Fail : User_Not_Found")
   void deleteAccountFail_UserNotFound() {
     // given
-    DeleteForm.Request request = DeleteForm.Request.builder()
+    DeleteForm request = DeleteForm.builder()
         .userId("notUser")
         .password("pw")
         .accountNumber("0123456789123")
@@ -129,7 +130,7 @@ class AccountServiceTest {
   @DisplayName("Delete_Account_Fail : Password_Incorrect")
   void deleteAccountFail_Password_Incorrect() {
     // given
-    DeleteForm.Request request = DeleteForm.Request.builder()
+    DeleteForm request = DeleteForm.builder()
         .userId("test2")
         .password("pw")
         .accountNumber("2361337411490")
@@ -150,7 +151,7 @@ class AccountServiceTest {
   @DisplayName("Delete_Account_Fail : Not_Your_Account")
   void deleteAccountFail_NotYourAccount() {
     // given
-    DeleteForm.Request request = DeleteForm.Request.builder()
+    DeleteForm request = DeleteForm.builder()
         .userId("test2")
         .password("pw2")
         .accountNumber("9583268840115")
@@ -170,7 +171,7 @@ class AccountServiceTest {
   @DisplayName("Delete_Account_Fail : Account_Not_Empty")
   void deleteAccountFail_AccountNotEmpty() {
     // given
-    DeleteForm.Request request = DeleteForm.Request.builder()
+    DeleteForm request = DeleteForm.builder()
         .userId("test2")
         .password("pw2")
         .accountNumber("2361337411490")
@@ -191,7 +192,7 @@ class AccountServiceTest {
   @DisplayName("Delete_Account_Fail : Account_Not_Found")
   void deleteAccountFail_AccountNotFound() {
     // given
-    DeleteForm.Request request = DeleteForm.Request.builder()
+    DeleteForm request = DeleteForm.builder()
         .userId("test2")
         .password("pw2")
         .accountNumber("0123456789123")

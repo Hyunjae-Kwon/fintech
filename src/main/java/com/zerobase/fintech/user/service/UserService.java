@@ -5,7 +5,6 @@ import com.zerobase.fintech.exception.ErrorCode;
 import com.zerobase.fintech.user.dao.UserRepository;
 import com.zerobase.fintech.user.entity.SignInForm;
 import com.zerobase.fintech.user.entity.SignUpForm;
-import com.zerobase.fintech.user.entity.UserDto;
 import com.zerobase.fintech.user.entity.UserEntity;
 import com.zerobase.fintech.util.PasswordUtils;
 import jakarta.transaction.Transactional;
@@ -23,7 +22,7 @@ public class UserService implements UserDetailsService {
 
   private final UserRepository userRepository;
 
-  public UserDto signUp(SignUpForm.Request request) {
+  public SignUpForm signUp(SignUpForm request) {
     // 아이디 중복 확인
     if (userRepository.existsByUserId(request.getUserId())) {
       throw new CustomException(ErrorCode.DUPLICATED_USERID);
@@ -37,11 +36,11 @@ public class UserService implements UserDetailsService {
 
     request.setPassword(PasswordUtils.encPassword(request.getPassword()));
 
-    UserEntity save = userRepository.save(SignUpForm.Request.toEntity(request));
+    UserEntity save = userRepository.save(SignUpForm.toEntity(request));
 
     log.info("User signup complete : {}", save);
 
-    return UserDto.from(save);
+    return SignUpForm.fromDto(save);
   }
 
   public UserEntity authenticateUser(SignInForm form) {
