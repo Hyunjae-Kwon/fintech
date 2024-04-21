@@ -30,7 +30,6 @@ public class DepositForm {
         .deposit(request.getDeposit())
         .transactionName(request.getTransactionName())
         .verify(true)
-        .createAt(LocalDateTime.now())
         .build();
   }
 

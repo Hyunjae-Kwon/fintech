@@ -38,7 +38,6 @@ public class WithdrawForm {
         .withdraw(request.getWithdraw())
         .transactionName(request.getTransactionName())
         .verify(true)
-        .createAt(LocalDateTime.now())
         .build();
   }
 

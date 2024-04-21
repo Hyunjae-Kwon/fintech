@@ -79,7 +79,7 @@ public class AccountService {
         .orElseThrow(() -> new CustomException(ErrorCode.USER_NOT_FOUND));
 
     Page<AccountEntity> accounts = accountRepository.findByUserId(user,
-        PageRequest.of(page, 5));
+        PageRequest.of(page, 10));
 
     if (accounts.getSize() == 0) {
       throw new CustomException(ErrorCode.NOT_HAVE_ACCOUNT);

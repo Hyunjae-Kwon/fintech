@@ -17,13 +17,13 @@ public class CreateForm {
   private String userId;
   private int amount;
   private LocalDateTime createAt;
+
   public static AccountEntity toEntity(UserEntity user,
       String accountNumber) {
     return AccountEntity.builder()
         .accountNumber(accountNumber)
         .userId(user)
         .amount(0)
-        .createAt(LocalDateTime.now())
         .build();
   }
 
