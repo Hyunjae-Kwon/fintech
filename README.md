@@ -97,4 +97,8 @@
 
 ---
 
+ - 추가 기능 및 추가 기술 적용 사항 개발중입니다.
+
+---
+
 <img src="https://capsule-render.vercel.app/api?type=waving&color=auto&height=150&section=footer" />
